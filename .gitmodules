@@ -1,0 +1,6 @@
+[submodule "SCHEMA-RASPP"]
+	path = SCHEMA-RASPP
+	url = https://github.com/hbhargava7/SCHEMA-RASPP.git
+[submodule "SCHEMA_RASPP"]
+	path = SCHEMA_RASPP
+	url = https://github.com/hbhargava7/SCHEMA-RASPP.git
