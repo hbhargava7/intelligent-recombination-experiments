@@ -1,6 +1,7 @@
 # Usage: generate_preconditions.py -i /path/to/folder -o /path/for/output
 
 import sys, string, os, glob, subprocess, pprint
+from picker import *
 from SCHEMA_RASPP import pdb
 from shutil import copyfile
 from Bio import SeqIO
@@ -43,6 +44,7 @@ def parse_arguments(args):
 	return arg_dict
 
 def main(args):
+
 	# Obtain arguments parsed into dictionary format.
 	parsed_arguments = parse_arguments(args)
 
@@ -78,18 +80,62 @@ def main(args):
 					parent["fasta_path"] = os.getcwd() + "/" + file
 
 			# Get the PDB file containing the structure.
-			for file in glob.glob("*.pdb"):
-				parent["pdb_seq"] = pdb.get(file)
-				parent["pdb_id"] = pdb.File().getIDCode(open(file,'r'))
-				parent["pdb_path"] = os.getcwd() + "/" + file
+			if len(glob.glob("*.pdb")) > 0:
+				for file in glob.glob("*.pdb"):
+					parent["pdb_seq"] = pdb.get(file)
+					parent["pdb_id"] = pdb.File().getIDCode(open(file,'r'))
+					parent["pdb_path"] = os.getcwd() + "/" + file
+
 			parents.append(parent)
 
 	print("Finished building " + str(len(parents)) + " parents.")
 
 	print("Please select a parent sequence and all additional sequences to compute.")
 
-	parent = parents[0]
-	children = parents[1:]
+	pickerOptions = []
+	potentialParents = []
+
+	for parentCandidate in parents:
+		if "pdb_path" in parentCandidate:
+			pickerOptions.append(str(parentCandidate["id"] + " | " + parentCandidate["pdb_id"]))
+			potentialParents.append(parentCandidate)
+
+	parentPicker = Picker(
+		title = "Please select a single sequence to use as a parent (showing only those with pdb structure file).",
+		options = pickerOptions
+		).getSelected()
+
+	if parentPicker == False:
+		print("Aborting, Parent selection was cancelled.")
+		return
+
+	parent = potentialParents[pickerOptions.index(parentPicker[0])]
+
+	pickerOptions = []
+
+	potentialChildren = []
+	for childCandidate in parents:
+		if "fasta_path" in childCandidate:
+			if childCandidate["fasta_path"] is parent["fasta_path"]:
+				continue
+			pickerOptions.append(childCandidate["id"])
+			potentialChildren.append(childCandidate)
+
+	childPicker = Picker(
+		title= "Please select the homologous sequences to be used for recombination (structures not required)",
+		options = pickerOptions
+		).getSelected()
+	
+	if childPicker == False:
+		print("Aborting, sequence selection was cancelled.")
+		return
+
+	children = []
+	for selectedOption in childPicker:
+		children.append(potentialChildren[pickerOptions.index(childPicker[0])])
+
+	print("Successfullly selected Parent: " + parent["id"])
+	print("Successfully selected Children: " + str(len(children)))
 
 	print("Step 2: Building FASTA file using all sequences.")
 	fasta_files = []
@@ -141,7 +187,6 @@ def main(args):
 
 	print("Preconditions successfully generated! Run the following command to generate contacts:")
 	print("python ../SCHEMA_RASPP/schemacontacts.py -pdb parent.pdb -msa allsequences_aligned.fasta -pdbal parent_aligned.fasta -o contacts.txt")
-
 def main_wrapper():
 	main(sys.argv)
 
