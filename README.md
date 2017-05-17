@@ -2,7 +2,7 @@
 This repository contains scripts and results related to structure- and homology-directed protein recombination experiments.
 
 ## Current Todo List
-* Add ability for user to select parent and "child" sequences in `generate_preconditions.py`
+* Add sequence identity calculation and display while selecting parents and children.
 
 ## SCHEMA-RASPP
 SCHEMA-RASPP is a protocol for structure-directed recombination using a parent structure and multiple homologous sequences. We have forked the original [CalTech repository](https://github.com/mattasmith/SCHEMA-RASPP) and initialized the forked version as a submodule in this repository (origin is [hbhargava/SCHEMA-RASPP](https://github.com/hbhargava7/SCHEMA-RASPP)).
