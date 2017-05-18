@@ -4,7 +4,7 @@ import sys, string, os, glob, subprocess, pprint
 from picker import *
 from SCHEMA_RASPP import pdb
 from shutil import copyfile
-from Bio import SeqIO
+from Bio import SeqIO, AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
@@ -42,6 +42,27 @@ def parse_arguments(args):
 			else:
 				arg_dict[key] = arg
 	return arg_dict
+
+def computeSequenceIdentityForAlignment(alignmentFile):
+	inputFile = open(alignmentFile, "rU")
+	alignment = AlignIO.read(inputFile, "clustal")
+
+	j=0 # counts positions in first sequence
+	i=0 # counts identity hits 
+	for record in alignment:
+	    for amino_acid in record.seq:
+	        if amino_acid == '-':
+	            pass
+	        else:
+	            if amino_acid == alignment[0].seq[j]:
+	                i += 1
+	        j += 1
+	    j = 0
+	    seq = str(record.seq)
+	    gap_strip = seq.replace('-', '')
+	    percent = 100*i/len(gap_strip)
+	    print record.id+' '+str(percent)
+	    i=0
 
 def main(args):
 
@@ -182,7 +203,10 @@ def main(args):
 	clustalomega_cline()
 	print("Completed sequence alignment.")
 
-	print("Step 6: Copying the selected parent structure file to output directory.")
+	print("Step 6: Computing sequence identity for aligned sequences.")
+	computeSequenceIdentityForAlignment(parsed_arguments["o"] + "/" + "parent_aligned.fasta")
+
+	print("Step 7: Copying the selected parent structure file to output directory.")
 	copyfile(parent["pdb_path"], parsed_arguments["o"]+"/parent.pdb")
 
 	print("Preconditions successfully generated! Run the following command to generate contacts:")
