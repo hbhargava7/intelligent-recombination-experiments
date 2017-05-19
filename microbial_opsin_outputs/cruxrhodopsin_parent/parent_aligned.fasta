@@ -1,0 +1,22 @@
+CLUSTAL O(1.2.1) multiple sequence alignment
+
+
+sp|P94854|BACR_HALVA      MPAPEGEAIWLWLGTAGMFLGMLYFIARGWGETDSRRQKFYIATILITAIAFVNYLAMAL
+4JR8                      ---PEGEAIWLWLGTAGMFLGMLYFIARGWGETDSRRQKFYIATILITAIAFVNYLAMAL
+                             *********************************************************
+
+sp|P94854|BACR_HALVA      GFGLTIVEIAGEQRPIYWARYSDWLFTTPLLLYDLGLLAGADRNTISSLVSLDVLMIGTG
+4JR8                      GFGLTIVEIAGEQRPIYWARYSDWLFTTPLLLYDLGLLAGADRNTISSLVSLDVLMIGTG
+                          ************************************************************
+
+sp|P94854|BACR_HALVA      LVATLSAGSGVLSAGAERLVWWGISTAFLLVLLYFLFSSLSGRVADLPSDTRSTFKTLRN
+4JR8                      LVATLSAGSGVLSAGAERLVWWGISTAFLLVLLYFLFSSLSGRVADLPSDTRSTFKTLRN
+                          ************************************************************
+
+sp|P94854|BACR_HALVA      LVTVVWLVYPVWWLVGTEGIGLVGIGIETAGFMVIDLVAKVGFGIILLRSHGVLDGAAET
+4JR8                      LVTVVWLVYPVWWLVGTEGIGLVGIGIETAGFMVIDLVAKVGFGIILLRSHGVLDGA---
+                          *********************************************************   
+
+sp|P94854|BACR_HALVA      TGAGATATAD
+4JR8                      ----------
+                                    

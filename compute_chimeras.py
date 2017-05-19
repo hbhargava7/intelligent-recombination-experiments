@@ -216,7 +216,7 @@ def main(args):
 	print("Step 7: Copying the selected parent structure file to output directory.")
 	copyfile(parent["pdb_path"], parsed_arguments["o"]+"/parent.pdb")
 
-	option = raw_input("Preconditions successfully generated. Would you like to continue with the chimera generation? (yes or no)")
+	option = raw_input("Preconditions successfully generated. Would you like to continue with the chimera generation? (yes or no) -> ")
 
 	if raw_input is "no":
 		return
@@ -225,12 +225,12 @@ def main(args):
 	SR_interlink.generateContacts(parsed_arguments["o"]+"/")
 
 	print("Step 9: Generating RASPP Curve for specified crossovers.")
-	nCrossovers = raw_input("Please specify number of crossover sites to compute: ")
+	nCrossovers = raw_input("Please specify number of crossover sites to compute -> ")
 	print("Now computing RASPP curve!")
-	SR_interlink.generateRASPPCurve(parsed_arguments["o"] + "/", nCrossovers, 5)
+	SR_interlink.generateRASPPCurve(parsed_arguments["o"] + "/", nCrossovers, 15)
 
 	print("Step 10: Computing SCHEMA energies.")
-	crossoverSites = raw_input("Please review the opt.txt file and input a set of crossover sites: ")
+	crossoverSites = raw_input("Please review the opt.txt file and input a set of crossover sites -> ")
 	SR_interlink.computeEnergies(parsed_arguments["o"] + "/", crossoverSites)
 
 def main_wrapper():
