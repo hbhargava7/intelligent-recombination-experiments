@@ -9,6 +9,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 from Bio.Align.Applications import ClustalOmegaCommandline
+import compute_chimeras
 
 class cd:
 	# Context manager for changing the current working directory
@@ -68,6 +69,11 @@ def main(args):
 
 	# Obtain arguments parsed into dictionary format.
 	parsed_arguments = parse_arguments(args)
+        
+        # Create the output directory if it does not exist.
+        output_path = parsed_arguments["o"]
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
 
 	print("Step 1: Building potential parents based on input directory.")
 
@@ -153,7 +159,7 @@ def main(args):
 
 	children = []
 	for selectedOption in childPicker:
-		children.append(potentialChildren[pickerOptions.index(childPicker[0])])
+		children.append(potentialChildren[pickerOptions.index(childPicker[childPicker.index(selectedOption)])])
 
 	print("Successfullly selected Parent: " + parent["id"])
 	print("Successfully selected Children: " + str(len(children)))
@@ -201,6 +207,7 @@ def main(args):
 	out_file = parsed_arguments["o"] + "/" + "parent_aligned.fasta"
 	clustalomega_cline = ClustalOmegaCommandline(infile=in_file, outfile=out_file, verbose=True, auto=True, force=True, outfmt="clu")
 	clustalomega_cline()
+
 	print("Completed sequence alignment.")
 
 	print("Step 6: Computing sequence identity for aligned sequences.")
@@ -211,6 +218,19 @@ def main(args):
 
 	print("Preconditions successfully generated! Run the following command to generate contacts:")
 	print("python ../SCHEMA_RASPP/schemacontacts.py -pdb parent.pdb -msa allsequences_aligned.fasta -pdbal parent_aligned.fasta -o contacts.txt")
+
+	print("Step 8: Computing contacts from PDB.")
+	compute_chimeras.generateContacts(parsed_arguments["o"]+"/")
+
+	print("Step 9: Generating RASPP Curve for specified crossovers.")
+	nCrossovers = raw_input("Please specify number of crossover sites to compute: ")
+	print("Now computing RASPP curve!")
+	compute_chimeras.generateRASPPCurve(parsed_arguments["o"] + "/", nCrossovers, 5)
+
+	print("Step 9: Computing RASPP curve")
+	crossoverSites = raw_input("Please review the opt.txt file and input a set of crossover sites: ")
+	compute_chimeras.computeEnergies(parsed_arguments["o"] + "/", crossoverSites)
+
 def main_wrapper():
 	main(sys.argv)
 
