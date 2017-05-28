@@ -19,7 +19,7 @@ This command will initiate the chimera generation process. The steps are outline
 3. Compute sequence alignment of all parent sequences using ClustalOmega.
 4. Build FASTA file with structure parent sequence and sequence from PDB file.
 5. Compute sequence alignment for both parent sequences using ClustalOmega.
-6. **[Incomplete]:** Compute the sequence identity for all possible pairs of homologs.
+6. **[In progress]:** Compute the sequence identity for all possible pairs of homologs.
 7. Copy parent PDB structure file to output folder for use by SCHEMA algorithm.
 8. Use `SCHEMA_RASPP.schemacontacts` via `SR_interlink` to perform radial search and determine contacts present in structure.
 9. Obtain desired number of crossovers from user and use `SCHEMA_RASPP.rasppcurve` via `SR_interlink` to compute the RASPP curve.
